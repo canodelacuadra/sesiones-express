@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { auth } from "../auth-middleware.js";
 const router = Router();
 router.get("/", (req, res) => {
  res.render("login");
 });
-router.post("/login", (req, res) => {
+router.post("/login", (req,  res) => {
 
    const { usuario, password } = req.body;
 
@@ -17,20 +18,18 @@ router.post("/login", (req, res) => {
        return res.redirect("/panel");
    }
 
-   res.send("Credenciales incorrectas");
-
 });
 
-router.get("/panel", (req, res) => {
+router.get(
+   "/panel",
+   auth,
+   (req, res) => {
+       res.render("panel", {
+           usuario: req.session.usuario
+       });
 
- if (!req.session.usuario) {
-   return res.redirect("/");
- }
-
- res.render("panel", {
-   usuario: req.session.usuario
- });
-});
+   }
+);
 
 router.get("/logout", (req, res) => {
 
