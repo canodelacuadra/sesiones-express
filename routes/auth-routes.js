@@ -4,11 +4,13 @@ const router = Router();
 const usuarios = [
    {
        usuario: "juan",
-       password: "1234"
+       password: "1234",
+       rol: "admin"
    },
    {
        usuario: "ana",
-       password: "abcd"
+       password: "abcd",
+       rol: "user"
    }
 ];
 
@@ -27,9 +29,12 @@ router.post("/login", (req,  res) => {
    if (!usuarioEncontrado) {
        return res.render("login",{error: "login Incorrecto"});
    }
+// ampliamos los datos de sesión
+req.session.usuario =
+   usuarioEncontrado.usuario;
 
-   req.session.usuario =
-       usuarioEncontrado.usuario;
+req.session.rol =
+   usuarioEncontrado.rol;
 
    res.redirect("/panel");
 
@@ -42,7 +47,8 @@ router.get(
    auth,
    (req, res) => {
        res.render("panel", {
-           usuario: req.session.usuario
+           usuario: req.session.usuario,
+               rol: req.session.rol
        });
 
    }
