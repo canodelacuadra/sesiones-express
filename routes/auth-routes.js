@@ -4,11 +4,21 @@ router.get("/", (req, res) => {
  res.render("login");
 });
 router.post("/login", (req, res) => {
- const { usuario } = req.body;
 
- req.session.usuario = usuario;
+   const { usuario, password } = req.body;
 
- res.redirect("/panel");
+   if (
+       usuario === "admin" &&
+       password === "1234"
+   ) {
+
+       req.session.usuario = usuario;
+
+       return res.redirect("/panel");
+   }
+
+   res.send("Credenciales incorrectas");
+
 });
 
 router.get("/panel", (req, res) => {
